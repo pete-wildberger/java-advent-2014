@@ -9,15 +9,25 @@ function onReady() {
 
   });
 }
+let items = [];
 
+function makeDiv(item){
+  console.log('makeDiv');
+  div = '<div><h2>'+ item.title +'</h2><p>'+ item.description +'</p></div>';
+  $('.output').append(div);
+}
 
 var displayToDo = function() {
   console.log('display');
   $.ajax({
     type: 'GET',
     url: '/api/todo',
-    success: function(response) {
-      console.log('meow', response);
+    success: function(res) {
+      console.log('meow', res);
+      for (let i = 0; i < res.length; i++) {
+      makeDiv(res[i]);
+      }
+
     }
   });
 };
