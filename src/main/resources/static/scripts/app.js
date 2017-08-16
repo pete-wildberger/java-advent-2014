@@ -6,7 +6,7 @@ function onReady() {
 
   $('#submit').on('click', function() {
     postToDo();
-    displayToDo();
+
   });
 }
 
@@ -29,6 +29,9 @@ var postToDo = function() {
   };
 $.postJSON('/api/todo', itemToSend, function(res){
   console.log(res);
+  $('#description').val('');
+  $('#title').val('');
+  displayToDo();
 });
 };
 
