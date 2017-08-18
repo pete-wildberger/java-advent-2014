@@ -7,20 +7,27 @@ function onReady() {
   $('#submit').on('click', function() {
     postToDo();
     });
+
   $('body').on('click', '#edit', function(){
-    this.css('display', 'block');
+    var curIdx = $(this).data('id');
+    $('#myModal').css('display', 'block');
   });
+
   $('body').on('click', '#x', function(){
+    $('#myModal').css('display', 'none');
+      });
 
-
+  $('#submitEdit').on('click', function(){
+    editToDo(curIdx);
   });
 }
 let items = [];
+let curIdx = 0;
 
 function makeDiv(i, item) {
   console.log('makeDiv');
   console.log(item.id);
-  div = '<div><h2>' + item.title + '</h2><p>' + item.description + '</p><button id="edit" onclick="editToDo(' + i + ')"> EDIT </button></div>';
+  div = '<div><h2>' + item.title + '</h2><p>' + item.description + '</p><button id="edit" data-id="' + item.id + '"> EDIT </button></div>';
   $('.output').append(div);
 }
 
@@ -46,20 +53,10 @@ var postToDo = function() {
   };
   $.postJSON('/api/todo', itemToSend, function(res) {
     console.log(res);
-    $('#description').val('');
-    $('#title').val('');
+    $('#description').empty();;
+    $('#title').empty();
     displayToDo();
   });
-};
-
-// When the user clicks on the button, open the modal
-btn.onclick = function() {
-  modal.style.display = "block";
-};
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-  modal.style.display = "none";
 };
 
 
@@ -73,15 +70,15 @@ window.onclick = function(event) {
 var editToDo = function(id) {
   console.log('post');
   let itemToSend = {
-    description: $('#description').val(),
-    title: $('#title').val()
+    description: $('#editDescription').val(),
+    title: $('#editTitle').val()
   };
   let url = '/api/todo/' + id;
 
   $.editJSON(url, itemToSend, function(res) {
     console.log(res);
-    $('#editDescription').val('');
-    $('#editTitle').val('');
+    $('#editDescription').empty();
+    $('#editTitle').empty();
     displayToDo();
   });
 };
