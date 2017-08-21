@@ -18,6 +18,7 @@ function onReady() {
       });
 
   $('#submitEdit').on('click', function(){
+    console.log(curIdx);
     editToDo(curIdx);
   });
 }
@@ -58,27 +59,26 @@ var postToDo = function() {
     displayToDo();
   });
 };
-
-
 window.onclick = function(event) {
   id = event.target.getAttribute("id");
   if (event.target.getAttribute("class") == 'modal') {
     document.getElementById(id).style.display = 'none';
   }
 };
-
 var editToDo = function(id) {
-  console.log('post');
+  console.log('edit');
   let itemToSend = {
     description: $('#editDescription').val(),
     title: $('#editTitle').val()
   };
   let url = '/api/todo/' + id;
-
+console.log('its', itemToSend);
+console.log('url', url);
   $.editJSON(url, itemToSend, function(res) {
     console.log(res);
     $('#editDescription').empty();
     $('#editTitle').empty();
+    $('#myModal').css('display', 'none');
     displayToDo();
   });
 };

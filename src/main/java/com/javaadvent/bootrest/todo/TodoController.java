@@ -65,6 +65,7 @@ final class TodoController {
     }
 
     @RequestMapping(value = "{id}", method = RequestMethod.GET)
+    
     TodoDTO findById(@PathVariable("id") String id) {
         LOGGER.info("Finding todo entry with id: {}", id);
 
