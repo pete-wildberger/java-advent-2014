@@ -23,6 +23,7 @@ import org.springframework.context.annotation.Configuration;
 public class TodoAppConfig {
 
     public static void main(String[] args) {
+      System.getProperties().put( "server.port", 2020 );
         SpringApplication.run(TodoAppConfig.class, args);
     }
 }

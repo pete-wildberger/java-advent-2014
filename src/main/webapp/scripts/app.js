@@ -1,4 +1,6 @@
 $(onReady);
+let items = [];
+let ids = [];
 
 function onReady() {
   console.log('JS is loaded');
@@ -9,7 +11,10 @@ function onReady() {
     });
 
   $('body').on('click', '#edit', function(){
+    console.log('index', $(this).data('id'));
     var curIdx = $(this).data('id');
+    console.log('curIdx', curIdx);
+    ids.push(curIdx);
     $('#myModal').css('display', 'block');
   });
 
@@ -18,12 +23,12 @@ function onReady() {
       });
 
   $('#submitEdit').on('click', function(){
-    console.log(curIdx);
-    editToDo(curIdx);
+    console.log(ids[0]);
+    editToDo(ids[0]);
+    ids.splice(0, ids.length);
   });
 }
-let items = [];
-let curIdx = 0;
+
 
 function makeDiv(i, item) {
   console.log('makeDiv');
@@ -68,6 +73,7 @@ window.onclick = function(event) {
 var editToDo = function(id) {
   console.log('edit');
   let itemToSend = {
+    // id: id,
     description: $('#editDescription').val(),
     title: $('#editTitle').val()
   };
