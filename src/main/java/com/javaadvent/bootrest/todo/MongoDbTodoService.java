@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,6 +34,7 @@ final class MongoDBTodoService implements TodoService {
         Todo persisted = Todo.getBuilder()
                 .title(todo.getTitle())
                 .description(todo.getDescription())
+                .now(todo.getDate())
                 .build();
 
         persisted = repository.save(persisted);
@@ -87,7 +88,7 @@ final class MongoDBTodoService implements TodoService {
         LOGGER.info("Updating todo entry with information: {}", todo);
 
         Todo updated = findTodoById(todo.getId());
-        updated.update(todo.getTitle(), todo.getDescription());
+        updated.update(todo.getTitle(), todo.getDescription(), todo.getDate());
         updated = repository.save(updated);
 
         LOGGER.info("Updated todo entry with information: {}", updated);
@@ -107,6 +108,7 @@ final class MongoDBTodoService implements TodoService {
         dto.setId(model.getId());
         dto.setTitle(model.getTitle());
         dto.setDescription(model.getDescription());
+        dto.setDate(model.getDate());
 
         return dto;
     }

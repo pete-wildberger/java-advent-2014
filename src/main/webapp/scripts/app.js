@@ -8,6 +8,7 @@ function onReady() {
 
   $('#submit').on('click', function() {
     postToDo();
+    $('.output').empty();
     });
 
   $('body').on('click', '#edit', function(){
@@ -26,6 +27,7 @@ function onReady() {
     console.log(ids[0]);
     editToDo(ids[0]);
     ids.splice(0, ids.length);
+    $('#myModal').css('display', 'none');
   });
 }
 
@@ -33,7 +35,20 @@ function onReady() {
 function makeDiv(i, item) {
   console.log('makeDiv');
   console.log(item.id);
-  div = '<div><h2>' + item.title + '</h2><p>' + item.description + '</p><button id="edit" data-id="' + item.id + '"> EDIT </button></div>';
+  var date = new Date(item.date*1000);
+  var hours = date.getHours();
+  // Minutes part from the timestamp
+  var minutes = "0" + date.getMinutes();
+  // Seconds part from the timestamp
+  var seconds = "0" + date.getSeconds();
+  // Will display time in 10:30:23 format
+  var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+
+  div = '<div><h2>' + item.title
+   + '</h2><p>' + item.description
+   + '</p><p>' + formattedTime
+   + '</p><button id="edit" data-id="' + item.id
+   + '"> EDIT </button></div>';
   $('.output').append(div);
 }
 
@@ -59,7 +74,7 @@ var postToDo = function() {
   };
   $.postJSON('/api/todo', itemToSend, function(res) {
     console.log(res);
-    $('#description').empty();;
+    $('#description').empty();
     $('#title').empty();
     displayToDo();
   });
@@ -85,6 +100,7 @@ console.log('url', url);
     $('#editDescription').empty();
     $('#editTitle').empty();
     $('#myModal').css('display', 'none');
+    $('.output').empty();
     displayToDo();
   });
 };

@@ -5,7 +5,7 @@ import org.springframework.data.annotation.Id;
 import static com.javaadvent.bootrest.util.PreCondition.isTrue;
 import static com.javaadvent.bootrest.util.PreCondition.notEmpty;
 import static com.javaadvent.bootrest.util.PreCondition.notNull;
-
+import java.util.Date;
 /**
  * @author Petri Kainulainen
  */
@@ -21,11 +21,14 @@ final class Todo {
 
     private String title;
 
+    private Date now = new Date();
+
     public Todo() {}
 
     private Todo(Builder builder) {
         this.description = builder.description;
         this.title = builder.title;
+        this.now = builder.now;
     }
 
     static Builder getBuilder() {
@@ -43,21 +46,26 @@ final class Todo {
     public String getTitle() {
         return title;
     }
+    public Date getDate() {
+        return now;
+    }
 
-    public void update(String title, String description) {
-        checkTitleAndDescription(title, description);
+    public void update(String title, String description, Date now) {
+        checkTitleAndDescription(title, description, now);
 
         this.title = title;
         this.description = description;
+        this.now = now;
     }
 
     @Override
     public String toString() {
         return String.format(
-                "Todo[id=%s, description=%s, title=%s]",
+                "Todo[id=%s, description=%s, title=%s, date=%s]",
                 this.id,
                 this.description,
-                this.title
+                this.title,
+                this.now
         );
     }
 
@@ -71,6 +79,8 @@ final class Todo {
 
         private String title;
 
+        private Date now;
+
         private Builder() {}
 
         Builder description(String description) {
@@ -83,16 +93,21 @@ final class Todo {
             return this;
         }
 
+        Builder now(Date now) {
+            this.now = now;
+            return this;
+        }
+
         Todo build() {
             Todo build = new Todo(this);
 
-            build.checkTitleAndDescription(build.getTitle(), build.getDescription());
+            build.checkTitleAndDescription(build.getTitle(), build.getDescription(), build.getDate());
 
             return build;
         }
     }
 
-    private void checkTitleAndDescription(String title, String description) {
+    private void checkTitleAndDescription(String title, String description, Date now) {
         notNull(title, "Title cannot be null");
         notEmpty(title, "Title cannot be empty");
         isTrue(title.length() <= MAX_LENGTH_TITLE,
