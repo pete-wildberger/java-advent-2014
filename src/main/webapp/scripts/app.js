@@ -19,6 +19,15 @@ function onReady() {
     $('#myModal').css('display', 'block');
   });
 
+  $('body').on('click', '#delete', function(){
+    console.log('index', $(this).data('id'));
+    var curIdx = $(this).data('id');
+    console.log('curIdx', curIdx);
+    ids.push(curIdx);
+    deleteToDo(ids[0]);
+    ids.splice(0, ids.length);
+  });
+
   $('body').on('click', '#x', function(){
     $('#myModal').css('display', 'none');
       });
@@ -48,7 +57,9 @@ function makeDiv(i, item) {
    + '</h2><p>' + item.description
    + '</p><p>' + formattedTime
    + '</p><button id="edit" data-id="' + item.id
-   + '"> EDIT </button></div>';
+   + '"> EDIT </button></div>'
+   + '<button id="delete" data-id="' + item.id
+   + '"> Delete </button></div>';
   $('.output').append(div);
 }
 
@@ -105,6 +116,19 @@ console.log('url', url);
   });
 };
 
+var deleteToDo = function(id) {
+  console.log('deleteJSON');
+
+  let url = '/api/todo/' + id;
+console.log('url', url);
+  $.deleteJSON(url, function(res) {
+    console.log(res);
+
+    $('.output').empty();
+    displayToDo();
+  });
+};
+
 $.postJSON = function(url, data, callback) {
   return jQuery.ajax({
     headers: {
@@ -129,6 +153,18 @@ $.editJSON = function(url, data, callback) {
     'url': url,
     'data': JSON.stringify(data),
     'dataType': 'json',
+    'success': callback
+  });
+};
+
+$.deleteJSON = function(url, callback) {
+  return jQuery.ajax({
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    'type': 'Delete',
+    'url': url,
     'success': callback
   });
 };
